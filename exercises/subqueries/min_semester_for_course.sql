@@ -8,3 +8,30 @@
 --          - мінімальним роком (зростання), потім за назвою курсу
 
 -- Рішення:
+with recursive course_depth as (
+    select
+        c.course_id,
+        c.name,
+        1 as min_year
+    from course c
+    left join course_prerequisite cp using(course_id)
+    where cp.prerequisite_course_id is null
+
+    union all
+
+    select
+        c.course_id,
+        c.name,
+        cd.min_year + 1
+    from course c
+    inner join course_prerequisite cp using(course_id)
+    inner join course_depth cd
+        on cp.prerequisite_course_id = cd.course_id
+)
+select
+    course_id,
+    name,
+    max(min_year) as min_year
+from course_depth
+group by course_id, name
+order by min_year asc, name;

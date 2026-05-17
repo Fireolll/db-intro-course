@@ -12,3 +12,24 @@
 --          - оцінкою (зростання), потім за назвою групи, потім за іменем студента, потім за назвою курсу
 
 -- Рішення:
+select 
+    sp.first_name || ' ' || sp.last_name as student_name,
+    sg.name as group_name,
+    c.name as course_name,
+    e.grade as grade,
+    lp.first_name || ' ' || lp.last_name as lecturer_name
+from enrolment e
+join student s on e.student_id = s.student_id
+join person sp on s.person_id = sp.person_id
+join student_group sg on s.group_id = sg.group_id
+join course c on e.course_id = c.course_id
+join course_teacher ct on c.course_id = ct.course_id
+join professor pr on ct.professor_id = pr.professor_id
+join person lp on pr.person_id = lp.person_id
+where 
+    e.grade < 60  and e.grade is not null and ct.professor_role = 'лектор'
+order by 
+    grade,
+    group_name,
+    student_name,
+    course_name;
