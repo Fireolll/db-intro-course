@@ -48,5 +48,5 @@ where round(sa.avg_value, 2) > round(ga.avg_value, 2)
 order by
     group_name asc,
     avg_student_grade desc,
-    full_name asc;
+    full_name;
 -- сподіваюся зараз все точно запрацюж

@@ -12,10 +12,10 @@
 with stud_with_many_enr as (
     select
         s.student_id,
-        per.first_name || ' ' || per.last_name as full_name,
+        p.first_name || ' ' || p.last_name as full_name,
         count(e.course_id) as course_number
     from student s
-    inner join person per using(person_id)
+    inner join person p using(person_id)
     inner join enrolment e using(student_id)
     group by s.student_id, full_name
 )
@@ -31,4 +31,7 @@ where course_number > (
     select avg(course_number)
     from stud_with_many_enr
 )
-order by course_number desc, full_name;
+order by 
+    course_number desc,    
+    full_name,
+    student_id;
